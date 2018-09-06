@@ -1,6 +1,7 @@
 import React from 'react';
 import {FieldGroup} from 'react-bootstrap'
-var DatePicker = require("react-bootstrap-date-picker");
+import text from 'react-bootstrap-table2-filter/lib/src/components/text';
+
 
 
 
@@ -10,10 +11,10 @@ class Form extends React.Component {
         super(props, context);
 
         this.state = {
-            firstName,
-            lastName,
-            birthDate,
-            country,
+            firstName: text,
+            lastName: text,
+            birthDate: text,
+            country: text,
         }
     }
 
@@ -23,9 +24,9 @@ class Form extends React.Component {
         return(
             <div className="Form">
                 <form>
-                    <FieldGroup id="firstNameInput" typen="text" label="Fist name" placeholder="Enter text"/>
-                    <FieldGroup id="lastNameInput" type="text" label="Last name" placeholder="Enter text"/>
-                    <FieldGroup id="countryInput" type="text" label="Country" placeholder="Enter text"/>
+                    <FieldGroup id="firstName" type="text" label="First name" placeholder="Enter text"/>
+                    <FieldGroup id="lastName" type="text" label="Last name" placeholder="Enter text"/>
+                    <FieldGroup id="country" type="text" label="Country" placeholder="Enter text"/>
                 </form>
             </div>
         );

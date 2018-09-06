@@ -10,7 +10,7 @@ class Header extends React.Component {
 
         this.state={
             labelStyle:{
-                'font-size': '32px',
+                'fontSize': '32px',
                 'bold': true,
                 'color': 'blue'
             }

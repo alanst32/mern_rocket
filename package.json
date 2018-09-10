@@ -33,9 +33,6 @@
   },
   "scripts": {
     "webpack": "webpack",
-    "build:dev": "webpack --env dev --progress --profile --colors",
-    "build:prod": "webpack --env prod --progress --profile --colors",
-    "start-dev": "npm run build:dev && nodemon --exec babel-node -- server/server.js",
-    "start-prod": "npm run build:prod && nodemon --exec babel-node -- server/server.js"
+    "start": "npm run webpack && nodemon --exec babel-node -- server/server.js"
   }
 }

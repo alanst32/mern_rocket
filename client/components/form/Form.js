@@ -2,9 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
+    divStyle: {
+        display:'block',
+        'text-align': 'left'
+    },
     textField: {
+        width: '400px',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
     }
@@ -40,12 +46,21 @@ class Form extends React.Component {
 
         return(
             <form className={classes.container} noValidate autoComplete="off">
-                <TextField id="firstName" label="First name" className={classes.textField} value={this.state.firstName}
-                           onChange={this.handleChange} margin="normal"/>
-                <TextField id="lastName" label="Last name" className={classes.textField} value={this.state.lastName}
-                           onChange={this.handleChange} margin="normal"/>
-                <TextField id="country" label="Country" className={classes.textField} value={this.state.country}
-                           onChange={this.handleChange} margin="normal"/>
+                <div className={classes.divStyle}>
+                    <TextField id="firstName" label="First name" className={classes.textField} value={this.state.firstName}
+                               onChange={this.handleChange} margin="normal"/>
+                </div>
+                <div className={classes.divStyle}>
+                    <TextField id="lastName" label="Last name" className={classes.textField} value={this.state.lastName}
+                               onChange={this.handleChange} margin="normal"/>
+                </div>
+                <div className={classes.divStyle}>
+                    <TextField id="country" label="Country" className={classes.textField} value={this.state.country}
+                               onChange={this.handleChange} margin="normal"/>
+                </div>
+                <div>
+                    <Button/>
+                </div>
             </form>
         );
     }

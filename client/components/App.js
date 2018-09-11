@@ -52,14 +52,14 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-            <Header totalUsers={this.state.users.length}/>
-        <ul>
-        <Form></Form>
-        </ul>
-        <ul>
-        <BootstrapTable bootstrap4={true} keyField='_id' data={this.state.users} columns={columns} filter={filterFactory()}/>
-        </ul>
-        </div>
+                <Header totalUsers={this.state.users.length}/>
+                <ul>
+                    <Form></Form>
+                </ul>
+                <ul>
+                    <BootstrapTable bootstrap4={true} keyField='_id' data={this.state.users} columns={columns} filter={filterFactory()}/>
+                </ul>
+            </div>
     );
     }
 }

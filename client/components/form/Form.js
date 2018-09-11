@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
     divStyle: {
@@ -13,6 +18,15 @@ const styles = theme => ({
         width: '400px',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
+    },
+    datePicker: {
+        width: '400px',
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit
+    },
+    button: {
+        margin: theme.spacing.unit,
+        fontSize: 14
     }
 })
 
@@ -26,19 +40,24 @@ class Form extends React.Component {
             person: {
                 firstName: '',
                 lastName: '',
-                country: ''
+                country: '',
+                dateBirth: moment()
             }
         }
 
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(event): void {
+    handleChange(event) {
         event.persist();
 
-        console.log(event);
-
         this.setState((state) => state.person[event.target.id] = event.target.value);
+    }
+
+    handleDateChange(date) {
+        event.persist();
+
+        this.setState((state) => state.person.dateBirth = date);
     }
 
     render(){
@@ -58,8 +77,15 @@ class Form extends React.Component {
                     <TextField id="country" label="Country" className={classes.textField} value={this.state.country}
                                onChange={this.handleChange} margin="normal"/>
                 </div>
-                <div>
-                    <Button/>
+                <div className={classes.divStyle}>
+                    Date of birth: 
+                    <DatePicker selected={this.state.startDate} onChange={this.handleDateChange}/>
+                </div>
+                <div className={classes.divStyle}>
+                    <Button className={classes.datePicker} variant="contained" size="small" className={classes.button}>
+                        <SaveIcon className={classes.button} />
+                        Save
+                    </Button>
                 </div>
             </form>
         );

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormLabel from '@material-ui/core/FormLabel';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel'
 import SaveIcon from '@material-ui/icons/Save';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -12,7 +15,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 const styles = theme => ({
     divStyle: {
         display:'block',
-        'text-align': 'left'
+        'text-align': 'left',
+        paddingTop: '25px',
     },
     textField: {
         width: '400px',
@@ -46,18 +50,17 @@ class Form extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
     }
 
     handleChange(event) {
         event.persist();
-
+        
         this.setState((state) => state.person[event.target.id] = event.target.value);
     }
 
     handleDateChange(date) {
-        event.persist();
-
-        this.setState((state) => state.person.dateBirth = date);
+        this.setState({ dateBirth: date });
     }
 
     render(){
@@ -66,23 +69,27 @@ class Form extends React.Component {
         return(
             <form className={classes.container} noValidate autoComplete="off">
                 <div className={classes.divStyle}>
-                    <TextField id="firstName" label="First name" className={classes.textField} value={this.state.firstName}
-                               onChange={this.handleChange} margin="normal"/>
+                    <Input required="true" id="firstName" placeholder="First Name" className={classes.textField} 
+                         onChange={this.handleChange} />
                 </div>
                 <div className={classes.divStyle}>
-                    <TextField id="lastName" label="Last name" className={classes.textField} value={this.state.lastName}
-                               onChange={this.handleChange} margin="normal"/>
+                    <span>
+                        <Input id="lastName" placeholder="Last Name" className={classes.textField} 
+                            required={true} onChange={this.handleChange} />
+                    </span>
                 </div>
                 <div className={classes.divStyle}>
-                    <TextField id="country" label="Country" className={classes.textField} value={this.state.country}
-                               onChange={this.handleChange} margin="normal"/>
+                    <Input id="country" placeholder="Country" className={classes.textField} 
+                            required={true} onChange={this.handleChange} />
                 </div>
                 <div className={classes.divStyle}>
-                    Date of birth: 
-                    <DatePicker selected={this.state.startDate} onChange={this.handleDateChange}/>
+                    <p></p>
+                    <DatePicker id="dateBirth" placeholderText="Date of Birth" required={true} 
+                        className={classes.datePicker} selected={this.state.dateBirth} onChange={this.handleDateChange}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <Button className={classes.datePicker} variant="contained" size="small" className={classes.button}>
+                    <p></p>
+                    <Button className={classes.button} variant="contained" size="small" className={classes.button}>
                         <SaveIcon className={classes.button} />
                         Save
                     </Button>

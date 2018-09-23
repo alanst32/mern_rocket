@@ -35,5 +35,4 @@
   "scripts": {
     "webpack": "webpack",
     "start": "npm run webpack && nodemon --exec babel-node -- server/server.js"
-  }
-}
+  }}

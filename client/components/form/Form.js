@@ -9,6 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import axios from 'axios';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { timingSafeEqual } from 'crypto';
@@ -49,6 +50,7 @@ class Form extends React.Component {
         super();
 
         this.state={
+            server_url: 'http://localhost:3000/api/',
             error: {
                 firstName: '',
                 lastName: '',
@@ -66,6 +68,8 @@ class Form extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.cleanForm = this.cleanForm.bind(this);
+        this.saveUser = this.saveUser.bind(this);
     }
 
     handleChange(event) {
@@ -84,6 +88,25 @@ class Form extends React.Component {
     handleDateChange(date) {
         this.setState({ dateBirth: date });
         this.setState((state) => state.error.dateBirth = "");
+    }
+
+    cleanForm(){
+        this.state.firstName = "";
+        this.state.lastName = "";
+        this.state.country = "";
+        this.state.dateBirth = "";
+    }
+    
+    saveUser(){
+        axios.put(this.state.server_url +"/user", {this.state.person})
+            .then( res => {
+                if(err){
+                    console.log("Error while persist service, " err);
+                    return;
+                }
+
+                this.cleanForm();
+            })
     }
 
     render(){

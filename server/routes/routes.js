@@ -40,9 +40,9 @@ router.post('/api/findUser', function(req, res){
 //ROUTE INSERT ============================================
 router.put('api/user', function (req, res){
     User.create({
-        name: req.query.name,
+        firstName: req.query.firstName,
+        lastName: req.query.lastName,
         dateBirth: req.query.dateBirth,
-        city: req.query.city,
         country: req.query.country
 
     }, function (err, users) {

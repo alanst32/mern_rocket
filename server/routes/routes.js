@@ -8,8 +8,9 @@ var mongoose = require("mongoose");
 
 var User 	= require('../model/User');
 
+
 //ROUTE SEARCH ============================================
-router.get('/api/users', function(req, res){
+router.get('/api/users', (req, res) => {
 
 	User.find({}, function(err, users){
 
@@ -38,14 +39,19 @@ router.post('/api/findUser', function(req, res){
 });
 
 //ROUTE INSERT ============================================
-router.put('api/user', function (req, res){
+router.put('/api/user', (req, res) => {
+
+    console.log("PUT: " + req);
+    console.log("PUT on firstname: " + req.body.firstName);
+    console.log("PUT on firstname: " + req.query.firstName);
+
     User.create({
-        firstName: req.query.firstName,
+        firstName: req.body.firstName,
         lastName: req.query.lastName,
         dateBirth: req.query.dateBirth,
         country: req.query.country
 
-    }, function (err, users) {
+    }, (err, users) => {
         if(err){
             res.send(err);
         }

@@ -50,7 +50,6 @@ class Form extends React.Component {
         super();
 
         this.state={
-            server_url: 'http://localhost:3000/api/',
             error: {
                 firstName: '',
                 lastName: '',
@@ -98,10 +97,19 @@ class Form extends React.Component {
     }
     
     saveUser(){
-        axios.put(this.state.server_url +"/user", {this.state.person})
+        const user = {
+            firstName: this.state.person.firstName
+        };
+        console.log(user);
+        
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        axios.put("/api/user", {user}, {headers})
             .then( res => {
                 if(err){
-                    console.log("Error while persist service, " err);
+                    console.log("Error while persist service, " + err);
                     return;
                 }
 
@@ -144,7 +152,7 @@ class Form extends React.Component {
                 </div>
                 <div className={classes.divStyle}>
                     <p></p>
-                    <Button className={classes.button} variant="contained" size="small" className={classes.button}>
+                    <Button className={classes.button} variant="contained" size="small" className={classes.button} onClick={() => this.saveUser()}>
                         <SaveIcon className={classes.button} />
                         Save
                     </Button>

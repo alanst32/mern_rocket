@@ -1,13 +1,11 @@
 /**
  * Created by alanterriaga on 30/7/18.
  */
-var mongoose = require("mongoose");
 var express = require('express');
-var router = express.Router();
-var mongoose = require("mongoose");
+const router = express.Router();
+const mongoose = require("mongoose");
 
-var User 	= require('../model/User');
-
+const User 	= require('../model/User');
 
 //ROUTE SEARCH ============================================
 router.get('/api/users', (req, res) => {
@@ -39,17 +37,15 @@ router.post('/api/findUser', function(req, res){
 });
 
 //ROUTE INSERT ============================================
-router.put('/api/user', (req, res) => {
+router.put('/api/user', function(req, res){
 
-    console.log("PUT: " + req);
-    console.log("PUT on firstname: " + req.body.firstName);
-    console.log("PUT on firstname: " + req.query.firstName);
-
+    console.log("PUT: " + req.body);
+  
     User.create({
         firstName: req.body.firstName,
-        lastName: req.query.lastName,
-        dateBirth: req.query.dateBirth,
-        country: req.query.country
+        lastName: req.body.lastName,
+        dateBirth: req.body.dateBirth,
+        country: req.body.country
 
     }, (err, users) => {
         if(err){

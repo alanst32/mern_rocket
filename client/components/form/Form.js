@@ -76,11 +76,10 @@ class Form extends React.Component {
 
         var errorMsg = "";
         
-        if(event.target.value === ""){
+        if(event.target.value === "") {
             errorMsg = "Field is required!";
         }
         this.setState((state) => state.error[event.target.id] = errorMsg);
-
         this.setState((state) => state.person[event.target.id] = event.target.value);
     }
 
@@ -97,24 +96,17 @@ class Form extends React.Component {
     }
     
     saveUser(){
-        const user = {
-            firstName: this.state.person.firstName
-        };
-        console.log(user);
-        
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        
-        axios.put("/api/user", {user}, {headers})
-            .then( res => {
-                if(err){
-                    console.log("Error while persist service, " + err);
-                    return;
-                }
-
-                this.cleanForm();
-            })
+        axios.put(
+            "/api/user", 
+            JSON.stringify(this.state.person), 
+            {headers: { 'Content-Type': 'application/json' }}
+        )
+        .then( res => {
+            this.cleanForm();
+        })
+        .catch( err => {
+            console.log(err)
+        });
     }
 
     render(){
@@ -146,7 +138,7 @@ class Form extends React.Component {
                     <p></p>
                     <DatePicker id="dateBirth" placeholderText="Date of Birth" required={true} 
                         className={classes.datePicker} selected={this.state.dateBirth} 
-                        onChange={this.handleDateChange} onBlur={this.handleChange}
+                        onChange={this.handleDateChange} onBlur={this.handleDateChange}
                         error={this.state.person.dateBirth.length === 0 ? true : false} helperText={this.state.error.dateBirth}/>
                     <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
                 </div>

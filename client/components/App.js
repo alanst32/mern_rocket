@@ -20,6 +20,14 @@ const columns = [
         dataField: 'lastName',
         text: 'Last Name',
         filter: textFilter()
+    },
+    {
+        dataField: 'country',
+        text: 'Country'
+    },
+    {
+        dataField: 'dateBirth',
+        text: 'Date of Birth'
     }
 ];
 
@@ -39,9 +47,9 @@ class App extends React.Component {
     getData(ev){
         axios.get("/api/users")
             .then(response => {
-
-            ev.setState({users: response.data});
-    })
+                ev.setState({users: response.data});
+            }
+        )
     .catch(ex => console.log("error loading users data" + ex));
     }
 
@@ -60,7 +68,7 @@ class App extends React.Component {
                     <BootstrapTable bootstrap4={true} keyField='_id' data={this.state.users} columns={columns} filter={filterFactory()}/>
                 </ul>
             </div>
-    );
+        );
     }
 }
 

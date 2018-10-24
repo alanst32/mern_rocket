@@ -25,14 +25,18 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
     },
+    textFieldInput: {
+        fontSize: '16px'
+    },
     datePicker: {
         width: '400px',
+        fontSize: '16px',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
     },
     errorMsg: {
         color: 'red',
-        fontSize: '10px',
+        fontSize: '16px',
         width: '400px',
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
@@ -119,14 +123,21 @@ class Form extends React.Component {
         return(
             <form className={classes.container} noValidate autoComplete="off">
                 <div className={classes.divStyle}>
-                    <TextField id="firstName" placeholder="First name" className={classes.textField} 
-                        onBlur={this.handleChange} error={this.state.person.firstName.length === 0 ? true : false }
+                    <TextField id="firstName" 
+                        placeholder="First name" 
+                        inputStyle={classes.textFieldInput}
+                        className={classes.textField} 
+                        onBlur={this.handleChange} 
+                        error={this.state.person.firstName.length === 0 ? true : false }
                         helperText={errorInputMsg("firstName")}/>
                 
                 </div>
                 <div className={classes.divStyle}>
-                    <TextField id="lastName" placeholder="Last Name" className={classes.textField} 
-                        onBlur={this.handleChange} error={this.state.person.lastName.length === 0 ? true : false }
+                    <TextField id="lastName" 
+                        placeholder="Last Name" 
+                        className={classes.textField} 
+                        onBlur={this.handleChange} 
+                        error={this.state.person.lastName.length === 0 ? true : false }
                         helperText={errorInputMsg("lastName")}/>
                 </div>
                 <div className={classes.divStyle}>
@@ -137,8 +148,10 @@ class Form extends React.Component {
                 <div className={classes.divStyle}>
                     <p></p>
                     <DatePicker id="dateBirth" placeholderText="Date of Birth" required={true} 
-                        className={classes.datePicker} selected={this.state.dateBirth} 
-                        onChange={this.handleDateChange} onBlur={this.handleDateChange}
+                        className={classes.datePicker} 
+                        selected={(this.state.dateBirth !== null) ? moment(this.state.dateBirth): moment()} 
+                        onChange={this.handleDateChange} 
+                        onBlur={this.handleDateChange}
                         error={this.state.person.dateBirth.length === 0 ? true : false} helperText={this.state.error.dateBirth}/>
                     <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
                 </div>

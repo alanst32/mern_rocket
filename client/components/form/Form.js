@@ -15,10 +15,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { timingSafeEqual } from 'crypto';
 
 const styles = theme => ({
+    container: {
+        justifyContent: 'center',
+        textAlign: 'center'
+    },
     divStyle: {
         display:'block',
-        'text-align': 'left',
-        paddingTop: '25px',
+        paddingTop: 25,
     },
     textField: {
         width: '400px',
@@ -26,11 +29,16 @@ const styles = theme => ({
         marginRight: theme.spacing.unit
     },
     textFieldInput: {
-        fontSize: '16px'
+        fontSize: 16
+    },
+    text: {
+        input: {
+            fontSize: 16
+        }
     },
     datePicker: {
         width: '400px',
-        fontSize: '16px',
+        fontSize: 16,
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
     },
@@ -47,9 +55,7 @@ const styles = theme => ({
     }
 })
 
-
 class Form extends React.Component {
-
     constructor(){
         super();
 
@@ -66,7 +72,6 @@ class Form extends React.Component {
                 country: '',
                 dateBirth: moment()
             }
-            
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -80,7 +85,7 @@ class Form extends React.Component {
 
         var errorMsg = "";
         
-        if(event.target.value === "") {
+        if(event.target.value === '') {
             errorMsg = "Field is required!";
         }
         this.setState((state) => state.error[event.target.id] = errorMsg);
@@ -93,10 +98,10 @@ class Form extends React.Component {
     }
 
     cleanForm(){
-        this.state.firstName = "";
-        this.state.lastName = "";
-        this.state.country = "";
-        this.state.dateBirth = "";
+        this.state.firstName = '';
+        this.state.lastName = '';
+        this.state.country = '';
+        this.state.dateBirth = '';
     }
     
     saveUser(){
@@ -125,8 +130,12 @@ class Form extends React.Component {
                 <div className={classes.divStyle}>
                     <TextField id="firstName" 
                         placeholder="First name" 
-                        inputStyle={classes.textFieldInput}
+                        multiline={false}
                         className={classes.textField} 
+                        InputProps={{classes: {
+                              input: classes.textFieldInput,
+                            },
+                        }}
                         onBlur={this.handleChange} 
                         error={this.state.person.firstName.length === 0 ? true : false }
                         helperText={errorInputMsg("firstName")}/>
@@ -134,25 +143,38 @@ class Form extends React.Component {
                 </div>
                 <div className={classes.divStyle}>
                     <TextField id="lastName" 
-                        placeholder="Last Name" 
+                        placeholder="Last Name"
                         className={classes.textField} 
+                        InputProps={{classes: {
+                            input: classes.textFieldInput,
+                          },
+                        }} 
                         onBlur={this.handleChange} 
                         error={this.state.person.lastName.length === 0 ? true : false }
                         helperText={errorInputMsg("lastName")}/>
                 </div>
                 <div className={classes.divStyle}>
-                    <TextField id="country" placeholder="Country" className={classes.textField} 
+                    <TextField id="country" 
+                        placeholder="Country" 
+                        className={classes.textField} 
+                        InputProps={{classes: {
+                            input: classes.textFieldInput,
+                          },
+                        }}
                         onBlur={this.handleChange} error={this.state.person.country.length === 0 ? true : false }
                         helperText={errorInputMsg("country")}/>
                 </div>
                 <div className={classes.divStyle}>
                     <p></p>
-                    <DatePicker id="dateBirth" placeholderText="Date of Birth" required={true} 
+                    <DatePicker id="dateBirth" 
+                        placeholderText="Date of Birth" 
+                        required={true} 
                         className={classes.datePicker} 
                         selected={(this.state.dateBirth !== null) ? moment(this.state.dateBirth): moment()} 
                         onChange={this.handleDateChange} 
                         onBlur={this.handleDateChange}
-                        error={this.state.person.dateBirth.length === 0 ? true : false} helperText={this.state.error.dateBirth}/>
+                        error={this.state.person.dateBirth.length === 0 ? true : false} 
+                        helperText={this.state.error.dateBirth}/>
                     <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
                 </div>
                 <div className={classes.divStyle}>

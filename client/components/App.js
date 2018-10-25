@@ -5,11 +5,8 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import Header from './header/Header';
 import Form from './form/Form';
-
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-
-
 
 const columns = [
     {
@@ -44,7 +41,7 @@ class App extends React.Component {
         this.getData = this.getData.bind(this);
     }
 
-    getData(ev){
+    getData(ev) {
         axios.get("/api/users")
             .then(response => {
                 ev.setState({users: response.data});
@@ -53,7 +50,7 @@ class App extends React.Component {
     .catch(ex => console.log("error loading users data" + ex));
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getData(this);
     }
 
@@ -65,7 +62,14 @@ class App extends React.Component {
                     <Form></Form>
                 </ul>
                 <ul>
-                    <BootstrapTable bootstrap4={true} keyField='_id' data={this.state.users} columns={columns} filter={filterFactory()}/>
+                    <BootstrapTable 
+                        bootstrap4={true} 
+                        keyField='_id' 
+                        data={this.state.users} 
+                        columns={columns}
+                        className="dataTable"
+                        tableStyle="dataTable" 
+                        filter={filterFactory()}/>
                 </ul>
             </div>
         );

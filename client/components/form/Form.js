@@ -64,7 +64,7 @@ class Form extends React.Component {
                 firstName: '',
                 lastName: '',
                 country: '',
-                dateBirth: ''
+                dateBirth: '',
             },
             person: {
                 firstName: '',
@@ -78,15 +78,17 @@ class Form extends React.Component {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.cleanForm = this.cleanForm.bind(this);
         this.saveUser = this.saveUser.bind(this);
+        this.isFormValid = this.isFormValid.bind(this);
     }
 
     handleChange(event) {
         event.persist();
-
-        var errorMsg = "";
+       
+        var errorMsg = '';
         
         if(event.target.value === '') {
-            errorMsg = "Field is required!";
+            errorMsg = 'Field is required!';
+            this.setState((state) => this.state.error.isError = true);
         }
         this.setState((state) => state.error[event.target.id] = errorMsg);
         this.setState((state) => state.person[event.target.id] = event.target.value);
@@ -94,28 +96,37 @@ class Form extends React.Component {
 
     handleDateChange(date) {
         this.setState({ dateBirth: date });
-        this.setState((state) => state.error.dateBirth = "");
+        this.setState((state) => {
+            state.error.dateBirth = "";
+            state.error.isError = true;
+        });
     }
 
     cleanForm(){
-        this.state.firstName = '';
-        this.state.lastName = '';
-        this.state.country = '';
-        this.state.dateBirth = '';
+        this.state.person.firstName = '';
+        this.state.person.lastName = '';
+        this.state.person.country = '';
+        this.state.person.dateBirth = '';
+    }
+
+    isFormValid(){
+        const {firstName, lastName, country, dateBirth,} = this.state.person;
+        return firstName.length > 0 && lastName.length > 0 && country.length > 0&& dateBirth.length > 0;
     }
     
     saveUser(){
-        axios.put(
-            "/api/user", 
-            JSON.stringify(this.state.person), 
-            {headers: { 'Content-Type': 'application/json' }}
-        )
-        .then( res => {
-            this.cleanForm();
-        })
-        .catch( err => {
-            console.log(err)
-        });
+
+        // axios.put(
+        //     "/api/user", 
+        //     JSON.stringify(this.state.person), 
+        //     {headers: { 'Content-Type': 'application/json' }}
+        // )
+        // .then( res => {
+        //     this.cleanForm();
+        // })
+        // .catch( err => {
+        //     console.log(err)
+        // });
     }
 
     render(){
@@ -174,12 +185,18 @@ class Form extends React.Component {
                         onChange={this.handleDateChange} 
                         onBlur={this.handleDateChange}
                         error={this.state.person.dateBirth.length === 0 ? true : false} 
-                        helperText={this.state.error.dateBirth}/>
+                        helperText={this.state.error.dateBirth}
+                        dateFormat="DD/MM/YYYY"/>
                     <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
                 </div>
                 <div className={classes.divStyle}>
                     <p></p>
-                    <Button className={classes.button} variant="contained" size="small" className={classes.button} onClick={() => this.saveUser()}>
+                    <Button 
+                        className={classes.button} 
+                        variant="contained" size="small" 
+                        className={classes.button} 
+                        disabled={() => this.isFormValid()}
+                        onClick={() => this.saveUser()}>
                         <SaveIcon className={classes.button} />
                         Save
                     </Button>

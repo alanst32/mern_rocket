@@ -76,15 +76,17 @@ class Form extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
-        this.cleanForm = this.cleanForm.bind(this);
         this.saveUser = this.saveUser.bind(this);
         this.isFormValid = this.isFormValid.bind(this);
     }
 
+    /**
+     * Handle the change of the inputs
+     * @param {*} event 
+     */
     handleChange(event) {
         event.persist();
-       
-        var errorMsg = '';
+        let errorMsg = '';
         
         if(event.target.value === '') {
             errorMsg = 'Field is required!';
@@ -94,41 +96,67 @@ class Form extends React.Component {
         this.setState((state) => state.person[event.target.id] = event.target.value);
     }
 
+    /**
+     * Handle the date input
+     * @param {*} date 
+     */
     handleDateChange(date) {
-        this.setState({ dateBirth: date });
-        this.setState((state) => {
-            state.error.dateBirth = "";
-            state.error.isError = true;
+        this.setState((state) => state.person.dateBirth = date);
+    }
+      
+    /**
+     * Verify is the date component has been changed
+     * @param {*} nextProps 
+     * @param {*} nextState 
+     */
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.person.dateBirth !== nextState.dateBirth) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate the form before saving the user
+     */
+    isFormValid() {
+        let result = true;
+
+        Object.keys(this.state.person).map( (key) => {
+            let field = this.state.person[key];
+            if(field === null || field === '') {
+                this.setState((state) => state.error[key] = 'Field is required');
+                result = false;
+            }
+        });
+        return result;
+    } 
+    
+    /**
+     * Save user profile
+     * @param {*} event 
+     */
+    saveUser(event) {
+        if(!this.isFormValid()) {
+            return;
+        }
+
+        axios.put(
+            '/api/user', 
+            JSON.stringify(this.state.person), 
+            {headers: { 'Content-Type': 'application/json' }}
+        )
+        .then( res => {
+            window.location.reload();
+        })
+        .catch( err => {
+            console.log(err)
         });
     }
 
-    cleanForm(){
-        this.state.person.firstName = '';
-        this.state.person.lastName = '';
-        this.state.person.country = '';
-        this.state.person.dateBirth = '';
-    }
-
-    isFormValid(){
-        const {firstName, lastName, country, dateBirth,} = this.state.person;
-        return firstName.length > 0 && lastName.length > 0 && country.length > 0&& dateBirth.length > 0;
-    }
-    
-    saveUser(){
-
-        // axios.put(
-        //     "/api/user", 
-        //     JSON.stringify(this.state.person), 
-        //     {headers: { 'Content-Type': 'application/json' }}
-        // )
-        // .then( res => {
-        //     this.cleanForm();
-        // })
-        // .catch( err => {
-        //     console.log(err)
-        // });
-    }
-
+    /**
+     * 
+     */
     render(){
         const { classes } = this.props;
 
@@ -150,7 +178,6 @@ class Form extends React.Component {
                         onBlur={this.handleChange} 
                         error={this.state.person.firstName.length === 0 ? true : false }
                         helperText={errorInputMsg("firstName")}/>
-                
                 </div>
                 <div className={classes.divStyle}>
                     <TextField id="lastName" 
@@ -181,9 +208,8 @@ class Form extends React.Component {
                         placeholderText="Date of Birth" 
                         required={true} 
                         className={classes.datePicker} 
-                        selected={(this.state.dateBirth !== null) ? moment(this.state.dateBirth): moment()} 
-                        onChange={this.handleDateChange} 
-                        onBlur={this.handleDateChange}
+                        selected={this.state.person.dateBirth}
+                        onChange={(event) => this.handleDateChange(event)}
                         error={this.state.person.dateBirth.length === 0 ? true : false} 
                         helperText={this.state.error.dateBirth}
                         dateFormat="DD/MM/YYYY"/>
@@ -193,10 +219,10 @@ class Form extends React.Component {
                     <p></p>
                     <Button 
                         className={classes.button} 
-                        variant="contained" size="small" 
+                        variant="contained" 
+                        size="small" 
                         className={classes.button} 
-                        disabled={() => this.isFormValid()}
-                        onClick={() => this.saveUser()}>
+                        onClick={(event) => this.saveUser(event)}>
                         <SaveIcon className={classes.button} />
                         Save
                     </Button>
@@ -205,7 +231,6 @@ class Form extends React.Component {
         );
     }
 }
-
 
 Form.propTypes = {
     classes: PropTypes.object.isRequired,

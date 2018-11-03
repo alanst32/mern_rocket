@@ -7,14 +7,24 @@ import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import Header from './header/Header';
 import Form from './form/Form';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import 'bootstrap/dist/css/bootstrap.css';
+import moment from 'moment';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 
 const styles = theme => ({
-    dataTable: {
-        margin: 'auto'
-    }    
+    App: {
+        justifyContent: 'center',
+        textAlign: 'center',
+    },
+    reactBootstrapTable: {
+        justifyContent: 'center',
+        textAlign: 'center',
+        width: '60%'
+    },   
+    tableContainer: {
+        color: 'red'
+    } 
 })
 
 const columns = [
@@ -42,16 +52,24 @@ class App extends React.Component {
         super();
 
         this.state = {
-            users: []
+            users: [],
+            selectRowProp: {
+                mode: 'checkbox'
+            }
         };
 
         this.getData = this.getData.bind(this);
     }
 
     getData(ev) {
-        axios.get("/api/users")
+        axios.get('/api/users')
             .then(response => {
-                ev.setState({users: response.data});
+                Object.keys(response.data).map( (index) => {
+                    let user = response.data[index];
+                    user.dateBirth = moment(user.dateBirth).format('DD/MM/YYYY');
+                    console.log(user);
+                    ev.setState((state) => state.users[index] = user);
+                });
             }
         )
     .catch(ex => console.log("error loading users data" + ex));
@@ -78,12 +96,12 @@ class App extends React.Component {
                         bootstrap4={true} 
                         keyField='_id' 
                         data={this.state.users} 
-                        tableStyle={classes.dataTable}
+                        selectRow={ this.state.selectRowProp }
                         columns={columns}
-                        className="dataTable"
-                        tableStyle="dataTable" 
+                        trClassName={classes.reactBootstrapTable}
                         pagination={paginationFactory()}
-                        filter={filterFactory()}/>
+                        filter={filterFactory()}
+                        tableStyle={ { border: '#0000FF 2.5px solid' } } />
                 </ul>
             </div>
         );

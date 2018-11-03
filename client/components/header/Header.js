@@ -20,7 +20,7 @@ class Header extends React.Component {
     render(){
         return(
             <header className="MERN TUTORIAL">
-                <Jumbotron align="center">
+                <Jumbotron align="center" marginWidth="auto">
                     <img src={ReactImage} alt="react" width={150} height={100} />
                     <h1>Users list: <Label style={this.state.labelStyle} bsStyle="info">{this.props.totalUsers}</Label></h1>
                 </Jumbotron>

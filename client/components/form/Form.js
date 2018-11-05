@@ -6,6 +6,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel'
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -49,6 +50,9 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
     },
+    buttonDiv: {
+        display: 'in-line'
+    },
     button: {
         margin: theme.spacing.unit,
         fontSize: 14
@@ -78,6 +82,7 @@ class Form extends React.Component {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.saveUser = this.saveUser.bind(this);
         this.isFormValid = this.isFormValid.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
     }
 
     /**
@@ -154,6 +159,11 @@ class Form extends React.Component {
         });
     }
 
+    deleteUser(event){
+        console.log(event);
+        console.log(this.state.selectRowProp);
+    }
+
     /**
      * 
      */
@@ -217,15 +227,24 @@ class Form extends React.Component {
                 </div>
                 <div className={classes.divStyle}>
                     <p></p>
-                    <Button 
-                        className={classes.button} 
-                        variant="contained" 
-                        size="small" 
-                        className={classes.button} 
-                        onClick={(event) => this.saveUser(event)}>
-                        <SaveIcon className={classes.button} />
-                        Save
-                    </Button>
+                    <div className={classes.buttonDiv}>
+                        <Button 
+                            className={classes.button} 
+                            variant="contained" 
+                            size="small" 
+                            onClick={(event) => this.saveUser(event)}>
+                            <SaveIcon className={classes.button} />
+                            Save
+                        </Button>
+                        <Button 
+                            className={classes.button}
+                            variant="contained"
+                            size="small"
+                            onClick={(event) => this.deleteUser(event)}>
+                            <DeleteIcon className={classes.button} />
+                            Delete    
+                        </Button>
+                    </div>
                 </div>
             </form>
         );

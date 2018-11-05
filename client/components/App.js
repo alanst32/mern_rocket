@@ -1,21 +1,68 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { any } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import axios from 'axios';
-import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import Header from './header/Header';
-import Form from './form/Form';
-import paginationFactory from 'react-bootstrap-table2-paginator';
 import moment from 'moment';
+import axios from 'axios';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import InputLabel from '@material-ui/core/InputLabel'
+import TextField from '@material-ui/core/TextField';
+import DatePicker from 'react-datepicker';
+import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table-next';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
     App: {
         justifyContent: 'center',
         textAlign: 'center',
+    },
+    container: {
+        justifyContent: 'center',
+        textAlign: 'center'
+    },
+    divStyle: {
+        display:'block',
+        paddingTop: 25,
+    },
+    textField: {
+        width: '400px',
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit
+    },
+    textFieldInput: {
+        fontSize: 16
+    },
+    text: {
+        input: {
+            fontSize: 16
+        }
+    },
+    datePicker: {
+        width: '400px',
+        fontSize: 16,
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit
+    },
+    errorMsg: {
+        color: 'red',
+        fontSize: '16px',
+        width: '400px',
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit
+    },
+    buttonDiv: {
+        display: 'in-line'
+    },
+    button: {
+        margin: theme.spacing.unit,
+        fontSize: 14
     },
     reactBootstrapTable: {
         justifyContent: 'center',
@@ -51,23 +98,131 @@ class App extends React.Component {
     constructor(){
         super();
 
-        this.state = {
+        this.state={
+            error: {
+                firstName: '',
+                lastName: '',
+                country: '',
+                dateBirth: '',
+            },
+            person: {
+                firstName: '',
+                lastName: '',
+                country: '',
+                dateBirth: moment()
+            },
             users: [],
             selectRowProp: {
                 mode: 'checkbox'
-            }
-        };
+            },
+            table: any
+        }
 
+        this.handleChange = this.handleChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.saveUser = this.saveUser.bind(this);
+        this.isFormValid = this.isFormValid.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
         this.getData = this.getData.bind(this);
     }
 
+    /**
+     * Handle the change of the inputs
+     * @param {*} event 
+     */
+    handleChange(event) {
+        event.persist();
+        let errorMsg = '';
+        
+        if(event.target.value === '') {
+            errorMsg = 'Field is required!';
+            this.setState((state) => this.state.error.isError = true);
+        }
+        this.setState((state) => state.error[event.target.id] = errorMsg);
+        this.setState((state) => state.person[event.target.id] = event.target.value);
+    }
+
+    /**
+     * Handle the date input
+     * @param {*} date 
+     */
+    handleDateChange(date) {
+        this.setState((state) => state.person.dateBirth = date);
+    }
+      
+    /**
+     * Verify is the date component has been changed
+     * @param {*} nextProps 
+     * @param {*} nextState 
+     */
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.person.dateBirth !== nextState.dateBirth) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate the form before saving the user
+     */
+    isFormValid() {
+        let result = true;
+
+        Object.keys(this.state.person).map( (key) => {
+            let field = this.state.person[key];
+            if(field === null || field === '') {
+                this.setState((state) => state.error[key] = 'Field is required');
+                result = false;
+            }
+        });
+        return result;
+    } 
+    
+    /**
+     * Save user profile
+     * @param {*} event 
+     */
+    saveUser(event) {
+        if(!this.isFormValid()) {
+            return;
+        }
+
+        axios.put(
+            '/api/user', 
+            JSON.stringify(this.state.person), 
+            {headers: { 'Content-Type': 'application/json' }}
+        )
+        .then( res => {
+            window.location.reload();
+        })
+        .catch( err => {
+            console.log(err)
+        });
+    }
+
+    deleteUser(event){
+        console.log(this.state.table.keys);
+        // console.log(this.refs.table.state);
+        // console.log(this.refs.table.selectRowProp);
+        console.log(this.state.table);
+        console.log(this.state.table.refs);
+        console.log(this.state.table.table);
+        console.log(this.state.table.table.refs);
+        //console.log(this.state.table.refs.table);
+       // console.log(this.state.table.refs.keys);
+       // console.log(this.refs.table.refs.table.state.selectedRowKeys)
+    }
+
+    /**
+     * 
+     * @param {*} ev 
+     */
     getData(ev) {
         axios.get('/api/users')
             .then(response => {
                 Object.keys(response.data).map( (index) => {
                     let user = response.data[index];
                     user.dateBirth = moment(user.dateBirth).format('DD/MM/YYYY');
-                    console.log(user);
                     ev.setState((state) => state.users[index] = user);
                 });
             }
@@ -82,11 +237,86 @@ class App extends React.Component {
     render() {
         const { classes } = this.props;
 
+        const errorInputMsg = (id) => (
+            <span className={classes.errorMsg}>{this.state.error[id]}</span>
+        )
+
         return (
             <div className="App">
                 <Header totalUsers={this.state.users.length}/>
                 <ul>
-                    <Form></Form>
+                    <form className={classes.container} noValidate autoComplete="off">
+                        <div className={classes.divStyle}>
+                            <TextField id="firstName" 
+                                placeholder="First name" 
+                                multiline={false}
+                                className={classes.textField} 
+                                InputProps={{classes: {
+                                    input: classes.textFieldInput,
+                                    },
+                                }}
+                                onBlur={this.handleChange} 
+                                error={this.state.person.firstName.length === 0 ? true : false }
+                                helperText={errorInputMsg("firstName")}/>
+                        </div>
+                        <div className={classes.divStyle}>
+                            <TextField id="lastName" 
+                                placeholder="Last Name"
+                                className={classes.textField} 
+                                InputProps={{classes: {
+                                    input: classes.textFieldInput,
+                                },
+                                }} 
+                                onBlur={this.handleChange} 
+                                error={this.state.person.lastName.length === 0 ? true : false }
+                                helperText={errorInputMsg("lastName")}/>
+                        </div>
+                        <div className={classes.divStyle}>
+                            <TextField id="country" 
+                                placeholder="Country" 
+                                className={classes.textField} 
+                                InputProps={{classes: {
+                                    input: classes.textFieldInput,
+                                },
+                                }}
+                                onBlur={this.handleChange} error={this.state.person.country.length === 0 ? true : false }
+                                helperText={errorInputMsg("country")}/>
+                        </div>
+                        <div className={classes.divStyle}>
+                            <p></p>
+                            <DatePicker id="dateBirth" 
+                                placeholderText="Date of Birth" 
+                                required={true} 
+                                className={classes.datePicker} 
+                                selected={this.state.person.dateBirth}
+                                onChange={(event) => this.handleDateChange(event)}
+                                error={this.state.person.dateBirth.length === 0 ? true : false} 
+                                helperText={this.state.error.dateBirth}
+                                dateFormat="DD/MM/YYYY"/>
+                            <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
+                        </div>
+                        <div className={classes.divStyle}>
+                            <p></p>
+                            <div className={classes.buttonDiv}>
+                                <Button 
+                                    className={classes.button} 
+                                    variant="contained" 
+                                    size="small" 
+                                    onClick={(event) => this.saveUser(event)}>
+                                    <SaveIcon className={classes.button} />
+                                    Save
+                                </Button>
+                                <Button 
+                                    className={classes.button}
+                                    variant="contained"
+                                    size="small"
+                                    onClick={(event) => this.deleteUser(event)}>
+                                    <DeleteIcon className={classes.button} />
+                                    Delete    
+                                </Button>
+                            </div>
+                        </div>
+                    </form>
                 </ul>
                 <ul>
                     <BootstrapTable 
@@ -95,13 +325,17 @@ class App extends React.Component {
                         bordered
                         bootstrap4={true} 
                         keyField='_id' 
+                        ref={ node => this.state.table = node }
                         data={this.state.users} 
                         selectRow={ this.state.selectRowProp }
-                        columns={columns}
-                        trClassName={classes.reactBootstrapTable}
+                        //columns={columns}
                         pagination={paginationFactory()}
-                        filter={filterFactory()}
-                        tableStyle={ { border: '#0000FF 2.5px solid' } } />
+                        filter={filterFactory()}>
+
+                        <TableHeaderColumn isKey={true} dataField="id">User ID</TableHeaderColumn>
+                        <TableHeaderColumn dataField="firstName">First Name</TableHeaderColumn>
+                        <TableHeaderColumn dataField="lastName">LastName</TableHeaderColumn>
+                    </BootstrapTable>
                 </ul>
             </div>
         );

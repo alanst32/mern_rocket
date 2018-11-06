@@ -29,6 +29,7 @@
     "react-bootstrap-table2-filter": "^1.0.1",
     "react-bootstrap-table2-paginator": "^1.0.3",
     "react-datepicker": "^1.7.0",
+    "react-day-picker": "^7.2.4",
     "react-dom": "^16.5.2",
     "react-modal": "^3.6.1",
     "react-native": "^0.56.1",
@@ -40,6 +41,10 @@
   },
   "scripts": {
     "webpack": "webpack",
+    "dev": "webpack --mode development",
     "start": "npm run webpack && nodemon --exec babel-node -- server/server.js"
+  },
+  "devDependencies": {
+    "@babel/preset-stage-0": "^7.0.0"
   }
 }

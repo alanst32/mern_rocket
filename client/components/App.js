@@ -11,7 +11,7 @@ import DatePicker from 'react-datepicker';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table-next';
+import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -94,6 +94,10 @@ const columns = [
     }
 ];
 
+
+
+const keysSelected = new Set();
+
 class App extends React.Component {
     constructor(){
         super();
@@ -112,10 +116,8 @@ class App extends React.Component {
                 dateBirth: moment()
             },
             users: [],
-            selectRowProp: {
-                mode: 'checkbox'
-            },
-            table: any
+            table: any,
+            selected: new Set()
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -124,6 +126,8 @@ class App extends React.Component {
         this.isFormValid = this.isFormValid.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.getData = this.getData.bind(this);
+        this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleOnSelectAll = this.handleOnSelectAll.bind(this);
     }
 
     /**
@@ -179,6 +183,27 @@ class App extends React.Component {
     } 
     
     /**
+     * 
+     * @param {*} ev 
+     */
+    getData(ev) {
+        axios.get('/api/users')
+            .then(response => {
+                Object.keys(response.data).map( (index) => {
+                    let user = response.data[index];
+                    user.dateBirth = moment(user.dateBirth).format('DD/MM/YYYY');
+                    ev.setState((state) => state.users[index] = user);
+                });
+            }
+        )
+    .catch(ex => console.log("error loading users data" + ex));
+    }
+
+    componentDidMount() {
+        this.getData(this);
+    }
+
+    /**
      * Save user profile
      * @param {*} event 
      */
@@ -201,7 +226,7 @@ class App extends React.Component {
     }
 
     deleteUser(event){
-        console.log(this.state.table.keys);
+        console.log(this.refs.table.state.selectedRowKeys)
         // console.log(this.refs.table.state);
         // console.log(this.refs.table.selectRowProp);
         console.log(this.state.table);
@@ -213,25 +238,22 @@ class App extends React.Component {
        // console.log(this.refs.table.refs.table.state.selectedRowKeys)
     }
 
-    /**
-     * 
-     * @param {*} ev 
-     */
-    getData(ev) {
-        axios.get('/api/users')
-            .then(response => {
-                Object.keys(response.data).map( (index) => {
-                    let user = response.data[index];
-                    user.dateBirth = moment(user.dateBirth).format('DD/MM/YYYY');
-                    ev.setState((state) => state.users[index] = user);
-                });
-            }
-        )
-    .catch(ex => console.log("error loading users data" + ex));
+    handleOnSelect = (row, isSelect) => {
+        if (isSelect) {
+            this.setState((state) => state.selected.add(row._id))
+        } else {
+            this.setState((state) => state.selected.delete(row._id))
+        }
+        return true;
     }
 
-    componentDidMount() {
-        this.getData(this);
+    handleOnSelectAll(row, isSelect){
+        if (isSelect) {
+            this.setState((state) => state.selected.add(row._id))
+        } else {
+            this.setState((state) => state.selected.delete(row._id))
+        }
+        return true;
     }
 
     render() {
@@ -239,7 +261,15 @@ class App extends React.Component {
 
         const errorInputMsg = (id) => (
             <span className={classes.errorMsg}>{this.state.error[id]}</span>
-        )
+        );
+
+        const selectRowProp = {
+            mode: "checkbox",
+            clickToSelect: true,
+            onSelect: this.handleOnSelect,
+            onSelectAll: this.handleOnSelectAll,
+            style: { backgroundColor: '#77A2E0' }
+        };
 
         return (
             <div className="App">
@@ -325,17 +355,12 @@ class App extends React.Component {
                         bordered
                         bootstrap4={true} 
                         keyField='_id' 
-                        ref={ node => this.state.table = node }
+                        ref='table'
                         data={this.state.users} 
-                        selectRow={ this.state.selectRowProp }
-                        //columns={columns}
+                        selectRow={selectRowProp}
+                        columns={columns}
                         pagination={paginationFactory()}
-                        filter={filterFactory()}>
-
-                        <TableHeaderColumn isKey={true} dataField="id">User ID</TableHeaderColumn>
-                        <TableHeaderColumn dataField="firstName">First Name</TableHeaderColumn>
-                        <TableHeaderColumn dataField="lastName">LastName</TableHeaderColumn>
-                    </BootstrapTable>
+                        filter={filterFactory()} />
                 </ul>
             </div>
         );

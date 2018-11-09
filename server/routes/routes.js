@@ -10,15 +10,19 @@ const User 	= require('../model/User');
 //ROUTE SEARCH ============================================
 router.get('/api/users', (req, res) => {
 
-	User.find({}, function(err, users){
+	User.find(
+	    {
+            enabled: true
+        },
+        (err, users) => {
+            if( err ){
+                res.send(error);
+            }
 
-		if( err ){
-			res.send(error);
-		}
-
-		// Return all clients
-		res.json(users);
-	});
+            // Return all clients
+            res.json(users);
+        }
+    );
 });
 
 router.post('/api/findUser', function(req, res){
@@ -39,13 +43,12 @@ router.post('/api/findUser', function(req, res){
 //ROUTE INSERT ============================================
 router.put('/api/user', function(req, res){
 
-    console.log("PUT: " + req.body);
-  
     User.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         dateBirth: req.body.dateBirth,
-        country: req.body.country
+        country: req.body.country,
+        enabled: true
 
     }, (err, users) => {
         if(err){
@@ -57,16 +60,21 @@ router.put('/api/user', function(req, res){
 
 //ROUTE DELETE ============================================
 router.post('/api/deleteUser', function(req, res){
-    // Put in an array in case of removal of one document
-    var numbersId = req.query.idChecked.split(',');
-    User.remove({
-        _id: { $in: numbersId}
-    },function(error, users){
-        if( error ){
-            res.send(error);
+    console.log("POST: " + req.body.userId);
+
+    User.update(
+        {_id: { $in: req.body.userId}},
+        {
+            enabled: false
+        },
+        {upsert: false}
+        ,function(error, users){
+            if( error ){
+                res.send(error);
+            }
+            res.end('success');
         }
-        res.end('success');
-    });
+    );
 });
 
 //ROUTE EDIT ============================================

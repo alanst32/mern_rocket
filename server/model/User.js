@@ -6,8 +6,8 @@ var UserSchema = new mongoose.Schema({
 	lastName: String,
 	dateBirth: { type: Date },
 	city: String,
-	country: String
-
+	country: String,
+	enabled: { type: Boolean, default: true }
 });
 
 // Model name, schema, collection name

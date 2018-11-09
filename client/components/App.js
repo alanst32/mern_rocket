@@ -115,9 +115,8 @@ class App extends React.Component {
                 country: '',
                 dateBirth: moment()
             },
-            users: [],
-            table: any,
-            selected: new Set()
+            users: []
+           
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -126,8 +125,6 @@ class App extends React.Component {
         this.isFormValid = this.isFormValid.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.getData = this.getData.bind(this);
-        this.handleOnSelect = this.handleOnSelect.bind(this);
-        this.handleOnSelectAll = this.handleOnSelectAll.bind(this);
     }
 
     /**
@@ -218,42 +215,38 @@ class App extends React.Component {
             {headers: { 'Content-Type': 'application/json' }}
         )
         .then( res => {
-            window.location.reload();
+            this.getData(this);
         })
         .catch( err => {
             console.log(err)
         });
     }
 
+    /**
+     * Delete the user from DB
+     * @param event
+     */
     deleteUser(event){
-        console.log(this.refs.table.state.selectedRowKeys)
-        // console.log(this.refs.table.state);
-        // console.log(this.refs.table.selectRowProp);
-        console.log(this.state.table);
-        console.log(this.state.table.refs);
-        console.log(this.state.table.table);
-        console.log(this.state.table.table.refs);
-        //console.log(this.state.table.refs.table);
-       // console.log(this.state.table.refs.keys);
-       // console.log(this.refs.table.refs.table.state.selectedRowKeys)
-    }
+        console.log(this.refs['table'].selectionContext.state.selected);
+        const ids = {
+            userId: this.refs['table'].selectionContext.state.selected
+        };
+        
+        console.log(ids);
 
-    handleOnSelect = (row, isSelect) => {
-        if (isSelect) {
-            this.setState((state) => state.selected.add(row._id))
-        } else {
-            this.setState((state) => state.selected.delete(row._id))
+        if (ids.userId.length > 0) {
+            axios.post(
+                'api/deleteUser',
+                JSON.stringify(ids),
+                {headers: { 'Content-Type': 'application/json' }}
+            )
+            .then(res => {
+                this.getData(this);
+            })
+            .catch( err => {
+                    console.log(err)
+            });
         }
-        return true;
-    }
-
-    handleOnSelectAll(row, isSelect){
-        if (isSelect) {
-            this.setState((state) => state.selected.add(row._id))
-        } else {
-            this.setState((state) => state.selected.delete(row._id))
-        }
-        return true;
     }
 
     render() {
@@ -263,11 +256,9 @@ class App extends React.Component {
             <span className={classes.errorMsg}>{this.state.error[id]}</span>
         );
 
-        const selectRowProp = {
+        const selectRow = {
             mode: "checkbox",
             clickToSelect: true,
-            onSelect: this.handleOnSelect,
-            onSelectAll: this.handleOnSelectAll,
             style: { backgroundColor: '#77A2E0' }
         };
 
@@ -354,10 +345,11 @@ class App extends React.Component {
                         hover
                         bordered
                         bootstrap4={true} 
-                        keyField='_id' 
-                        ref='table'
+                        keyField="_id" 
+                        //ref={(table) => this.myDatatable = table}
+                        ref="table"
                         data={this.state.users} 
-                        selectRow={selectRowProp}
+                        selectRow={selectRow}
                         columns={columns}
                         pagination={paginationFactory()}
                         filter={filterFactory()} />

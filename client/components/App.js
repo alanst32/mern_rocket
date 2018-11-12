@@ -5,6 +5,7 @@ import Header from './header/Header';
 import moment from 'moment';
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import cellEditFactory from 'react-bootstrap-table2-editor';
 import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField';
 import DatePicker from 'react-datepicker';
@@ -64,6 +65,10 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         fontSize: 14
     },
+    buttonTable: {
+        margin: theme.spacing.unit,
+        fontSize: 10
+    },
     reactBootstrapTable: {
         justifyContent: 'center',
         textAlign: 'center',
@@ -91,6 +96,21 @@ const columns = [
     {
         dataField: 'dateBirth',
         text: 'Date of Birth'
+    },
+    {
+        dataField: '',
+        text: '',
+        formatter: (cellContent, row) => (
+            <div>
+                <Button 
+                    className={classes.buttonTable}
+                    variant="contained"
+                    size="small"
+                    onClick={(event) => this.updateUser(event)}>
+                    Update
+                </Button>
+            </div>
+        )
     }
 ];
 
@@ -125,8 +145,10 @@ class App extends React.Component {
         this.isFormValid = this.isFormValid.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.getData = this.getData.bind(this);
+        this.updateUser = this.updateUser.bind(this);
     }
 
+   
     /**
      * Handle the change of the inputs
      * @param {*} event 
@@ -180,7 +202,7 @@ class App extends React.Component {
     } 
     
     /**
-     * 
+     * Load the users
      * @param {*} ev 
      */
     getData(ev) {
@@ -199,7 +221,7 @@ class App extends React.Component {
     componentDidMount() {
         this.getData(this);
     }
-
+    
     /**
      * Save user profile
      * @param {*} event 
@@ -227,13 +249,10 @@ class App extends React.Component {
      * @param event
      */
     deleteUser(event){
-        console.log(this.refs['table'].selectionContext.state.selected);
         const ids = {
             userId: this.refs['table'].selectionContext.state.selected
         };
         
-        console.log(ids);
-
         if (ids.userId.length > 0) {
             axios.post(
                 'api/deleteUser',
@@ -249,6 +268,10 @@ class App extends React.Component {
         }
     }
 
+    updateUser(event){
+        console.log(event);
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -259,7 +282,8 @@ class App extends React.Component {
         const selectRow = {
             mode: "checkbox",
             clickToSelect: true,
-            style: { backgroundColor: '#77A2E0' }
+            clickToEdit: true,
+            style: { backgroundColor: "#77A2E0" }
         };
 
         return (
@@ -346,13 +370,13 @@ class App extends React.Component {
                         bordered
                         bootstrap4={true} 
                         keyField="_id" 
-                        //ref={(table) => this.myDatatable = table}
                         ref="table"
                         data={this.state.users} 
                         selectRow={selectRow}
                         columns={columns}
                         pagination={paginationFactory()}
-                        filter={filterFactory()} />
+                        filter={filterFactory()} 
+                        cellEdit={ cellEditFactory({mode: "dbclick"}) }/>
                 </ul>
             </div>
         );

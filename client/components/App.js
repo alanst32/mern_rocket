@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes, { any } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Header from './header/Header';
+import UpdateButton from './datatable/UpdateButton';
 import moment from 'moment';
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -65,10 +66,6 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         fontSize: 14
     },
-    buttonTable: {
-        margin: theme.spacing.unit,
-        fontSize: 10
-    },
     reactBootstrapTable: {
         justifyContent: 'center',
         textAlign: 'center',
@@ -98,25 +95,13 @@ const columns = [
         text: 'Date of Birth'
     },
     {
-        dataField: '',
+        dataField: 'update',
         text: '',
-        formatter: (cellContent, row) => (
-            <div>
-                <Button 
-                    className={classes.buttonTable}
-                    variant="contained"
-                    size="small"
-                    onClick={(event) => this.updateUser(event)}>
-                    Update
-                </Button>
-            </div>
+        editorRenderer: (editorProps, value, row, rowIndex, columnIndex) => (
+            <UpdateButton value={value} row={row}/>
         )
     }
 ];
-
-
-
-const keysSelected = new Set();
 
 class App extends React.Component {
     constructor(){
@@ -148,6 +133,7 @@ class App extends React.Component {
         this.updateUser = this.updateUser.bind(this);
     }
 
+    
    
     /**
      * Handle the change of the inputs
@@ -217,10 +203,6 @@ class App extends React.Component {
         )
     .catch(ex => console.log("error loading users data" + ex));
     }
-
-    componentDidMount() {
-        this.getData(this);
-    }
     
     /**
      * Save user profile
@@ -272,6 +254,13 @@ class App extends React.Component {
         console.log(event);
     }
 
+    /**
+     * 
+     */
+    componentDidMount() {
+        this.getData(this);
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -282,8 +271,8 @@ class App extends React.Component {
         const selectRow = {
             mode: "checkbox",
             clickToSelect: true,
-            clickToEdit: true,
-            style: { backgroundColor: "#77A2E0" }
+            style: { backgroundColor: "#77A2E0" },
+            clickToEdit: true
         };
 
         return (
@@ -375,8 +364,8 @@ class App extends React.Component {
                         selectRow={selectRow}
                         columns={columns}
                         pagination={paginationFactory()}
-                        filter={filterFactory()} 
-                        cellEdit={ cellEditFactory({mode: "dbclick"}) }/>
+                        filter={filterFactory()}
+                        cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) } />
                 </ul>
             </div>
         );

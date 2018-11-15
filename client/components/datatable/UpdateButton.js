@@ -6,9 +6,11 @@ import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 
 const styles = theme => ({
+    UpdateButton: {
+    },
     button: {
         margin: theme.spacing.unit,
-        fontSize: 10
+        fontSize: 8
     },
 });
 
@@ -29,17 +31,19 @@ class UpdateButton extends React.Component {
     }
 
     render(){
-        const { userId } = this.props;
+        const { classes } = this.props;
 
         return(
-            <Button
-                className={classes.button}
-                variant="contained"
-                size="small"
-                onClick={(event) => this.updateUser(userId)}>
-                <SaveIcon className={classes.button} />
-                Save
-            </Button>
+            <div className="UpdateButton">
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    size="small"
+                    onClick={(event) => this.updateUser(userId)}>
+                    <SaveIcon className={classes.button} />
+                    Save
+                </Button>
+            </div>
         );
     }
 }

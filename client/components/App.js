@@ -70,11 +70,29 @@ const styles = theme => ({
         justifyContent: 'center',
         textAlign: 'center',
         width: '60%'
-    },   
+    },
+    headerDataTable: {
+        textAlign: 'center',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        backgroundColor: '#c8e6c9'
+    },
+    rowDataTable: {
+         fontSize: '16px'
+    },
     tableContainer: {
         color: 'red'
     } 
 })
+
+function dateFormatter(cell, row) {
+    if (row.dateBirth) {
+        return (
+            <span>{moment(row.dateBirth).format('DD/MM/YYYY')}</span>
+        );
+    }
+}
+
 
 const columns = [
     {
@@ -88,18 +106,22 @@ const columns = [
     },
     {
         dataField: 'country',
-        text: 'Country'
+        text: 'Country',
     },
     {
         dataField: 'dateBirth',
-        text: 'Date of Birth'
+        text: 'Date of Birth',
+        formatter: dateFormatter,
     },
     {
         dataField: 'update',
-        text: '',
-        editorRenderer: (editorProps, value, row, rowIndex, columnIndex) => (
-            <UpdateButton value={value} row={row}/>
-        )
+        isDummyField: true,
+        text: 'Update',
+        formatter: (cellContent, row) => {
+            return (
+               <UpdateButton value={row._id} row={row}/>
+            );
+        }
     }
 ];
 
@@ -194,11 +216,7 @@ class App extends React.Component {
     getData(ev) {
         axios.get('/api/users')
             .then(response => {
-                Object.keys(response.data).map( (index) => {
-                    let user = response.data[index];
-                    user.dateBirth = moment(user.dateBirth).format('DD/MM/YYYY');
-                    ev.setState((state) => state.users[index] = user);
-                });
+                ev.setState((state) => state.users = response.data);
             }
         )
     .catch(ex => console.log("error loading users data" + ex));
@@ -365,7 +383,9 @@ class App extends React.Component {
                         columns={columns}
                         pagination={paginationFactory()}
                         filter={filterFactory()}
-                        cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) } />
+                        headerClasses={classes.headerDataTable}
+                        rowClasses={classes.rowDataTable}
+                        cellEdit={ cellEditFactory({ mode: 'dbclick', blurToSave: true }) } />
                 </ul>
             </div>
         );

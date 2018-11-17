@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes, { any } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
+import {Button, Glyphicon}  from 'react-bootstrap';
 import SaveIcon from '@material-ui/icons/Save';
 
 const styles = theme => ({
@@ -10,7 +10,7 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
-        fontSize: 8
+        fontSize: 12
     },
 });
 
@@ -20,14 +20,24 @@ class UpdateButton extends React.Component {
     constructor() {
         super();
 
-        console.log('update button');
-
         this.updateUser = this.updateUser.bind(this);
     }
 
-    updateUser(userId) {
-        console.log(this.props);
-        console.log(userId);
+    /**
+     * Update user
+     */
+    updateUser() {
+        axios.post(
+            '/api/updateUser',
+            JSON.stringify(this.props.row),
+            {headers: { 'Content-Type': 'application/json' }}
+        )
+        .then( res => {
+            this.getData(this);
+        })
+        .catch( err => {
+            console.log(err)
+        });
     }
 
     render(){
@@ -35,12 +45,12 @@ class UpdateButton extends React.Component {
 
         return(
             <div className="UpdateButton">
-                <Button
+                 <Button
+                    size="medium"
                     className={classes.button}
                     variant="contained"
-                    size="small"
-                    onClick={(event) => this.updateUser(userId)}>
-                    <SaveIcon className={classes.button} />
+                    onClick={(event) => this.updateUser()}>
+                    <Glyphicon glyph="glyphicon glyphicon-save" />
                     Save
                 </Button>
             </div>

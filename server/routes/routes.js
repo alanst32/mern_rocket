@@ -1,5 +1,5 @@
 /**
- * Created by alanterriaga on 30/7/18.
+ * Created by alanterriaga on 30/10/18.
  */
 var express = require('express');
 const router = express.Router();
@@ -67,8 +67,7 @@ router.post('/api/deleteUser', function(req, res){
         {
             enabled: false
         },
-        {upsert: false}
-        ,function(error, users){
+        function(error, users){
             if( error ){
                 res.send(error);
             }
@@ -78,16 +77,17 @@ router.post('/api/deleteUser', function(req, res){
 });
 
 //ROUTE EDIT ============================================
-router.post('/api/editUser', function(req, res){
-    User.update(
-        {_id: req.query.idChecked},
+router.post('/api/updateUser', function(req, res){
+
+    User.updateOne(
+        {_id: { $in: req.body._id}},
         {
-            name: req.query.name,
-            dateBirth: req.query.dateBirth,
-            city: req.query.city,
-            country: req.query.country
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            dateBirth: req.body.dateBirth,
+            country: req.body.country,
         },
-        {upsert: true}
+        {upsert: false}
         ,function(error, users){
             if( error ){
                 res.send(error);

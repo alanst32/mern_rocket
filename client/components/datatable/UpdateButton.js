@@ -33,7 +33,7 @@ class UpdateButton extends React.Component {
             {headers: { 'Content-Type': 'application/json' }}
         )
         .then( res => {
-            this.getData(this);
+            this.props.reloadData();
         })
         .catch( err => {
             console.log(err)

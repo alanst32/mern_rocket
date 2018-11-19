@@ -1,5 +1,5 @@
 /**
- * Created by alanterriaga on 30/10/18.
+ * Created by alanterriaga on 27/10/18.
  */
 var express = require('express');
 const router = express.Router();
@@ -22,7 +22,8 @@ router.get('/api/users', (req, res) => {
             // Return all clients
             res.json(users);
         }
-    );
+    )
+    .sort( { updatedAt: -1 });
 });
 
 router.post('/api/findUser', function(req, res){
@@ -62,7 +63,7 @@ router.put('/api/user', function(req, res){
 router.post('/api/deleteUser', function(req, res){
     console.log("POST: " + req.body.userId);
 
-    User.update(
+    User.updateMany(
         {_id: { $in: req.body.userId}},
         {
             enabled: false
@@ -86,6 +87,7 @@ router.post('/api/updateUser', function(req, res){
             lastName: req.body.lastName,
             dateBirth: req.body.dateBirth,
             country: req.body.country,
+            updatedAt: Date.now()
         },
         {upsert: false}
         ,function(error, users){

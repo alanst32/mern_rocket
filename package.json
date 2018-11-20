@@ -45,9 +45,14 @@
   "scripts": {
     "webpack": "webpack",
     "dev": "webpack --mode development",
-    "start": "npm run webpack && nodemon --exec babel-node -- server/server.js"
+    "start": "npm run webpack && nodemon --exec babel-node -- server/server.js",
+    "test": "jest"
   },
   "devDependencies": {
-    "@babel/preset-stage-0": "^7.0.0"
+    "@babel/preset-stage-0": "^7.0.0",
+    "babel-jest": "^23.6.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^23.6.0"
   }
 }

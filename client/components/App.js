@@ -55,36 +55,7 @@ function dateFormatter(cell, row) {
 }
 
 
-const columns = [
-    {
-        dataField: 'firstName',
-        text: 'First Name'
-    },
-    {
-        dataField: 'lastName',
-        text: 'Last Name',
-        filter: textFilter()
-    },
-    {
-        dataField: 'country',
-        text: 'Country',
-    },
-    {
-        dataField: 'dateBirth',
-        text: 'Date of Birth',
-        formatter: dateFormatter,
-    },
-    {
-        dataField: 'update',
-        isDummyField: true,
-        text: 'Update',
-        formatter: (cellContent, row) => {
-            return (
-               <UpdateButton  value={row._id} row={row}/>
-            );
-        }
-    }
-];
+
 
 class App extends React.Component {
     setRef = myComponent => this.myComponent = myComponent;
@@ -123,6 +94,37 @@ class App extends React.Component {
 
     render() {
         const { classes } = this.props;
+
+        const columns = [
+            {
+                dataField: 'firstName',
+                text: 'First Name'
+            },
+            {
+                dataField: 'lastName',
+                text: 'Last Name',
+                filter: textFilter()
+            },
+            {
+                dataField: 'country',
+                text: 'Country',
+            },
+            {
+                dataField: 'dateBirth',
+                text: 'Date of Birth',
+                formatter: dateFormatter,
+            },
+            {
+                dataField: 'update',
+                isDummyField: true,
+                text: 'Update',
+                formatter: (cellContent, row) => {
+                    return (
+                        <UpdateButton  value={row._id} row={row} reloadData={this.getData}/>
+                    );
+                }
+            }
+        ];
 
         const errorInputMsg = (id) => (
             <span className={classes.errorMsg}>{this.state.error[id]}</span>

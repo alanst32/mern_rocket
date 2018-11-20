@@ -23,6 +23,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
     App: {
+        width: '99%',
         justifyContent: 'center',
         textAlign: 'center',
     },
@@ -135,7 +136,7 @@ class App extends React.Component {
         };
 
         return (
-            <div className="App">
+            <div className={classes.App}>
                 <Header totalUsers={this.state.users.length}/>
                 <Form users={this.refs['table']} reloadData={this.getData}></Form>
                 <ul>

@@ -20,31 +20,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
-
-const styles = theme => ({
-    App: {
-        width: '99%',
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
-    reactBootstrapTable: {
-        justifyContent: 'center',
-        textAlign: 'center',
-        width: '60%'
-    },
-    headerDataTable: {
-        textAlign: 'center',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        backgroundColor: '#c8e6c9'
-    },
-    rowDataTable: {
-         fontSize: '16px'
-    },
-    tableContainer: {
-        color: 'red'
-    } 
-})
+import styles from './App.css';
 
 function dateFormatter(cell, row) {
     if (row.dateBirth) {
@@ -53,9 +29,6 @@ function dateFormatter(cell, row) {
         );
     }
 }
-
-
-
 
 class App extends React.Component {
     setRef = myComponent => this.myComponent = myComponent;
@@ -138,7 +111,7 @@ class App extends React.Component {
         };
 
         return (
-            <div className={classes.App}>
+            <div className={styles.App}>
                 <Header totalUsers={this.state.users.length}/>
                 <Form users={this.refs['table']} reloadData={this.getData}></Form>
                 <ul>
@@ -154,8 +127,8 @@ class App extends React.Component {
                         columns={columns}
                         pagination={paginationFactory()}
                         filter={filterFactory()}
-                        headerClasses={classes.headerDataTable}
-                        rowClasses={classes.rowDataTable}
+                        headerClasses={styles.headerDataTable}
+                        rowClasses={styles.rowDataTable}
                         cellEdit={ cellEditFactory({ mode: 'dbclick', blurToSave: true }) } />
                 </ul>
             </div>
@@ -163,9 +136,9 @@ class App extends React.Component {
     }
 }
 
-App.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
+//App.propTypes = {
+//    classes: PropTypes.object.isRequired,
+//};
 
-export default withStyles(styles)(App);
+export default App;
 

@@ -1,5 +1,5 @@
 /**
- * Created by alanterriaga on 30/7/18.
+ * Created by alanterriaga
  */
 var path = require('path');
 var webpack = require('webpack');

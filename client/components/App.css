@@ -1,0 +1,22 @@
+.app {
+    width: 99%;
+    justify-content: center;
+    text-align: center;
+}
+.reactBootstrapTable {
+    justify-content: center;
+    text-align: center;
+    width: 60%;
+}
+.headerDataTable {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #c8e6c9;
+}
+.rowDataTable {
+     font-size: 16px;
+}
+.tableContainer {
+    color: red;
+}

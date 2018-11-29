@@ -1,0 +1,36 @@
+.container {
+    justify-content: center;
+    text-align: center;
+}
+.divStyle {
+    display: block;
+    padding-top: 25px;
+}
+.textField {
+    width: 400px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.textFieldInput {
+    font-size: 16px;
+}
+.datePicker {
+    width: 400px;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.errorMsg {
+    color: red;
+    font-size: 16px;
+    width: 400px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.buttonDiv {
+    display: inline;
+}
+.button {
+    margin: theme.spacing.unit;
+    font-size: 14px;
+}

@@ -100,7 +100,7 @@ class App extends React.Component {
         ];
 
         const errorInputMsg = (id) => (
-            <span className={classes.errorMsg}>{this.state.error[id]}</span>
+            <span className={styles.errorMsg}>{this.state.error[id]}</span>
         );
 
         const selectRow = {

@@ -15,51 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import 'react-datepicker/dist/react-datepicker.css';
-
-
-const styles = theme => ({
-    container: {
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    divStyle: {
-        display:'block',
-        paddingTop: 25,
-    },
-    textField: {
-        width: '400px',
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit
-    },
-    textFieldInput: {
-        fontSize: 16
-    },
-    text: {
-        input: {
-            fontSize: 16
-        }
-    },
-    datePicker: {
-        width: '400px',
-        fontSize: 16,
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit
-    },
-    errorMsg: {
-        color: 'red',
-        fontSize: '16px',
-        width: '400px',
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit
-    },
-    buttonDiv: {
-        display: 'in-line'
-    },
-    button: {
-        margin: theme.spacing.unit,
-        fontSize: 14
-    },
-})
+import styles from './Form.css';
 
 class Form extends React.Component {
     constructor(){
@@ -214,56 +170,54 @@ class Form extends React.Component {
      * 
      */
     render(){
-        const { classes } = this.props;
-
         const errorInputMsg = (id) => (
-            <span className={classes.errorMsg}>{this.state.error[id]}</span>
+            <span className={styles.errorMsg}>{this.state.error[id]}</span>
         )
 
         return(
-           <form id="myForm" className={classes.container} noValidate autoComplete="off">
-               <div className={classes.divStyle}>
+           <form id="myForm" className={styles.container} noValidate autoComplete="off">
+               <div className={styles.divStyle}>
                    <TextField id="firstName"
                        placeholder="First name"
                        multiline={false}
-                       className={classes.textField}
+                       className={styles.textField}
                        InputProps={{classes: {
-                           input: classes.textFieldInput,
+                           input: styles.textFieldInput,
                            },
                        }}
                        onBlur={this.handleChange}
                        error={this.state.person.firstName.length === 0 ? true : false }
                        helperText={errorInputMsg("firstName")}/>
                </div>
-               <div className={classes.divStyle}>
+               <div className={styles.divStyle}>
                    <TextField id="lastName"
                        placeholder="Last Name"
-                       className={classes.textField}
+                       className={styles.textField}
                        InputProps={{classes: {
-                           input: classes.textFieldInput,
+                           input: styles.textFieldInput,
                        },
                        }}
                        onBlur={this.handleChange}
                        error={this.state.person.lastName.length === 0 ? true : false }
                        helperText={errorInputMsg("lastName")}/>
                </div>
-               <div className={classes.divStyle}>
+               <div className={styles.divStyle}>
                    <TextField id="country"
                        placeholder="Country"
-                       className={classes.textField}
+                       className={styles.textField}
                        InputProps={{classes: {
-                           input: classes.textFieldInput,
+                           input: styles.textFieldInput,
                        },
                        }}
                        onBlur={this.handleChange} error={this.state.person.country.length === 0 ? true : false }
                        helperText={errorInputMsg("country")}/>
                </div>
-               <div className={classes.divStyle}>
+               <div className={styles.divStyle}>
                    <p></p>
                    <DatePicker id="dateBirth"
                        placeholderText="Date of Birth"
                        required={true}
-                       className={classes.datePicker}
+                       className={styles.datePicker}
                        selected={this.state.person.dateBirth}
                        onChange={(event) => this.handleDateChange(event)}
                        error={this.state.person.dateBirth.length === 0 ? true : false}
@@ -271,23 +225,23 @@ class Form extends React.Component {
                        dateFormat="DD/MM/YYYY"/>
                    <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
                </div>
-               <div className={classes.divStyle}>
+               <div className={styles.divStyle}>
                    <p></p>
-                   <div className={classes.buttonDiv}>
+                   <div className={styles.buttonDiv}>
                        <Button
-                           className={classes.button}
+                           className={styles.button}
                            variant="contained"
                            size="small"
                            onClick={(event) => this.saveUser(event)}>
-                           <SaveIcon className={classes.button} />
+                           <SaveIcon className={styles.button} />
                            Save
                        </Button>
                        <Button
-                           className={classes.button}
+                           className={styles.button}
                            variant="contained"
                            size="small"
                            onClick={(event) => this.deleteUser(event)}>
-                           <DeleteIcon className={classes.button} />
+                           <DeleteIcon className={styles.button} />
                            Delete
                        </Button>
                    </div>
@@ -297,8 +251,4 @@ class Form extends React.Component {
     }
 }
 
-Form.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Form);
+export default Form;

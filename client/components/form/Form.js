@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import FormLabel from '@material-ui/core/FormLabel';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel'
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -14,8 +11,15 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import styles from './Form.css';
+import { withStyles } from '@material-ui/core/styles';
+
+const inLineStyles = theme => ({
+    textFieldInput: {
+        fontSize: '16px'
+    }
+});
 
 class Form extends React.Component {
     constructor(){
@@ -170,85 +174,98 @@ class Form extends React.Component {
      * 
      */
     render(){
+        const { classes } = this.props;
+
         const errorInputMsg = (id) => (
             <span className={styles.errorMsg}>{this.state.error[id]}</span>
         )
 
+        const inputStyles = {
+            fontSize: '40px'
+        }
+
         return(
-           <form id="myForm" className={styles.container} noValidate autoComplete="off">
+           <form id="myForm" className={styles.myForm} noValidate autoComplete="off">
                <div className={styles.divStyle}>
-                   <TextField id="firstName"
-                       placeholder="First name"
-                       multiline={false}
-                       className={styles.textField}
-                       InputProps={{classes: {
-                           input: styles.textFieldInput,
-                           },
-                       }}
-                       onBlur={this.handleChange}
-                       error={this.state.person.firstName.length === 0 ? true : false }
-                       helperText={errorInputMsg("firstName")}/>
-               </div>
-               <div className={styles.divStyle}>
-                   <TextField id="lastName"
-                       placeholder="Last Name"
-                       className={styles.textField}
-                       InputProps={{classes: {
-                           input: styles.textFieldInput,
-                       },
-                       }}
-                       onBlur={this.handleChange}
-                       error={this.state.person.lastName.length === 0 ? true : false }
-                       helperText={errorInputMsg("lastName")}/>
-               </div>
-               <div className={styles.divStyle}>
-                   <TextField id="country"
-                       placeholder="Country"
-                       className={styles.textField}
-                       InputProps={{classes: {
-                           input: styles.textFieldInput,
-                       },
-                       }}
-                       onBlur={this.handleChange} error={this.state.person.country.length === 0 ? true : false }
-                       helperText={errorInputMsg("country")}/>
-               </div>
-               <div className={styles.divStyle}>
-                   <p></p>
-                   <DatePicker id="dateBirth"
-                       placeholderText="Date of Birth"
-                       required={true}
-                       className={styles.datePicker}
-                       selected={this.state.person.dateBirth}
-                       onChange={(event) => this.handleDateChange(event)}
-                       error={this.state.person.dateBirth.length === 0 ? true : false}
-                       helperText={this.state.error.dateBirth}
-                       dateFormat="DD/MM/YYYY"/>
-                   <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
-               </div>
-               <div className={styles.divStyle}>
-                   <p></p>
-                   <div className={styles.buttonDiv}>
-                       <Button
-                           className={styles.button}
-                           variant="contained"
-                           size="small"
-                           onClick={(event) => this.saveUser(event)}>
-                           <SaveIcon className={styles.button} />
-                           Save
-                       </Button>
-                       <Button
-                           className={styles.button}
-                           variant="contained"
-                           size="small"
-                           onClick={(event) => this.deleteUser(event)}>
-                           <DeleteIcon className={styles.button} />
-                           Delete
-                       </Button>
-                   </div>
-               </div>
+                    <div className={styles.components}>
+                        <TextField id="firstName" 
+                                    placeholder="First name"
+                                    multiline={false}
+                                    className={styles.textField}
+                                    InputProps={{
+                                        classes: {
+                                          input: classes.textFieldInput
+                                        }
+                                    }}
+                                    onBlur={this.handleChange}
+                                    error={this.state.person.firstName.length === 0 ? true : false }
+                                    helperText={errorInputMsg("firstName")}/>
+                    </div>
+                    <div className={styles.components}>
+                        <TextField id="lastName"
+                                    placeholder="Last Name"
+                                    className={styles.textField}
+                                    InputProps={{
+                                        classes: {
+                                          input: classes.textFieldInput
+                                        }
+                                    }}
+                                    onBlur={this.handleChange}
+                                    error={this.state.person.lastName.length === 0 ? true : false }
+                                    helperText={errorInputMsg("lastName")}/>
+                    </div>
+                    <div className={styles.components}>
+                        <TextField id="country"
+                                    placeholder="Country"
+                                    className={styles.textField}
+                                    InputProps={{
+                                        classes: {
+                                          input: classes.textFieldInput
+                                        }
+                                    }}
+                                    onBlur={this.handleChange} error={this.state.person.country.length === 0 ? true : false }
+                                    helperText={errorInputMsg("country")}/>
+                    </div>
+                    <div className={styles.components}>
+                        <DatePicker id="dateBirth"
+                            placeholderText="Date of Birth"
+                            required={true}
+                            className={styles.datePicker}
+                            selected={this.state.person.dateBirth}
+                            onChange={(event) => this.handleDateChange(event)}
+                            error={this.state.person.dateBirth.length === 0 ? true : false}
+                            helperText={this.state.error.dateBirth}
+                            dateFormat="DD/MM/YYYY"/>
+                        <InputLabel id="dateBirth">{errorInputMsg("dateBirth")}</InputLabel>
+                     </div>
+                     <div className={styles.components}>
+                        <div className={styles.buttonDiv}>
+                            <Button
+                                className={styles.button}
+                                variant="contained"
+                                size="medium"
+                                onClick={(event) => this.saveUser(event)}>
+                                <SaveIcon className={styles.button} />
+                                Save
+                            </Button>
+                            <Button
+                                className={styles.button}
+                                variant="contained"
+                                size="medium"
+                                onClick={(event) => this.deleteUser(event)}>
+                                <DeleteIcon className={styles.button} />
+                                Delete
+                            </Button>
+                        </div>
+                    </div>
+                </div>
            </form>
         );
     }
 }
 
-export default Form;
+Form.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(inLineStyles)(Form);

@@ -111,18 +111,18 @@ class App extends React.Component {
         };
 
         return (
-            <div className={styles.App}>
+            <div className={styles.app}>
                 <Header totalUsers={this.state.users.length}/>
                 <Form users={this.refs['table']} reloadData={this.getData}></Form>
-                <ul>
-                    <BootstrapTable 
+                <div className={styles.divTable}>
+                    <BootstrapTable
                         striped
                         hover
                         bordered
-                        bootstrap4={true} 
-                        keyField="_id" 
+                        bootstrap4={true}
+                        keyField="_id"
                         ref="table"
-                        data={this.state.users} 
+                        data={this.state.users}
                         selectRow={selectRow}
                         columns={columns}
                         pagination={paginationFactory()}
@@ -130,15 +130,10 @@ class App extends React.Component {
                         headerClasses={styles.headerDataTable}
                         rowClasses={styles.rowDataTable}
                         cellEdit={ cellEditFactory({ mode: 'dbclick', blurToSave: true }) } />
-                </ul>
+                </div>
             </div>
         );
     }
 }
 
-//App.propTypes = {
-//    classes: PropTypes.object.isRequired,
-//};
-
 export default App;
-

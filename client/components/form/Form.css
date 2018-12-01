@@ -1,21 +1,31 @@
-.container {
+.myForm {
     justify-content: center;
     text-align: center;
+    display: block;
+    position: relative;
+    margin-top: 20px;
 }
 .divStyle {
-    display: block;
-    padding-top: 25px;
+    flex-direction: column;
+    width: 45%;
+    position: relative;
+    margin: auto;
+    border-radius: 15px;
+    border: 2px solid #c8e6c9;
 }
-.textField {
-    width: 400px;
+.components {
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 20px;
 }
-.textFieldInput {
-    font-size: 16px;
+.textField {
+    width: 450px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
 }
 .datePicker {
-    width: 400px;
+    width: 450px;
     font-size: 16px;
     margin-left: 10px;
     margin-right: 10px;
@@ -28,9 +38,11 @@
     margin-right: 10px;
 }
 .buttonDiv {
-    display: inline;
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
 }
 .button {
-    margin: theme.spacing.unit;
     font-size: 14px;
 }

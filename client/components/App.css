@@ -1,12 +1,16 @@
 .app {
-    width: 99%;
+    width: 98%;
     justify-content: center;
     text-align: center;
+    margin: auto;
 }
 .reactBootstrapTable {
     justify-content: center;
     text-align: center;
     width: 60%;
+}
+.divTable {
+    margin-top: 20px;
 }
 .headerDataTable {
     text-align: center;

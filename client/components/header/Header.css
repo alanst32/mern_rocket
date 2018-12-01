@@ -1,5 +1,22 @@
+
+.header {
+    height: 150px;
+}
+.jumbotron {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+.infoBox {
+    justify-content: center;
+    display: flex;
+    vertical-align: center;
+}
 .labelStyle {
     font-size: 32px;
-    bold: true;
-    color: blue;
+    font-weight: bold;
+    color: white;
+    margin-top: 20px;
+    height: 90%;
 }

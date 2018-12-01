@@ -15,10 +15,11 @@ class Header extends React.Component {
 
     render(){
         return(
-            <header className="MERN TUTORIAL">
-                <Jumbotron align="center" marginWidth="auto">
-                    <img src={ReactImage} alt="react" width={150} height={100} />
-                    <h1>Users list: <Label style={styles.labelStyle} bsStyle="info">{this.props.totalUsers}</Label></h1>
+            <header className={styles.header}>
+                <Jumbotron className={styles.jumbotron}>
+                        <img src={ReactImage} alt="react" width={150} height={100} />
+                        <h1>Users list:</h1>
+                        <Label className={styles.labelStyle} bsStyle="info">{this.props.totalUsers}</Label>
                 </Jumbotron>
             </header>
         );

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes, { any } from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Header from './header/Header';
 import Form from './form/Form';
 import UpdateButton from './datatable/UpdateButton';
@@ -8,12 +6,6 @@ import moment from 'moment';
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import cellEditFactory from 'react-bootstrap-table2-editor';
-import InputLabel from '@material-ui/core/InputLabel'
-import TextField from '@material-ui/core/TextField';
-import DatePicker from 'react-datepicker';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
-import DeleteIcon from '@material-ui/icons/Delete';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -49,7 +41,6 @@ class App extends React.Component {
      * @param {*} ev 
      */
     getData() {
-        console.log('getData called');
         axios.get('/api/users')
             .then(response => {
                 this.setState((state) => state.users = response.data);
